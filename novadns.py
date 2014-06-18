@@ -7,8 +7,10 @@ import signal
 from novaclient.v1_1 import client
 from jinja2 import Environment, FileSystemLoader
 
-CONFIG_FILE = "/home/centos/novadns/novadns.conf"
+NOVADNS_HOME = "/home/centos/novadns"
+CONFIG_FILE = NOVADNS_HOME + "/novadns.conf"
 OSCOMPUTE_ERROR = 0
+
 
 class Novadns:
 
@@ -18,6 +20,7 @@ class Novadns:
 		self.tenant = tenant
 		self.auth_url = auth_url
 		self.wait_time = wait_time
+
 
 def exitGracefully(signal, frame):
 	print "User entered ctrl-c, exiting..."
@@ -43,7 +46,6 @@ def getConfig():
 	else:
 		return False
 
-
 def getCompute(USER, PASS, TENANT, AUTH_URL):
 
 	try:
@@ -52,9 +54,9 @@ def getCompute(USER, PASS, TENANT, AUTH_URL):
 	except:
 		return False
 
-
 def getTemplate():
-	env = Environment(loader=FileSystemLoader('/home/centos/novadns'))
+	global NOVADNS_HOME
+	env = Environment(loader=FileSystemLoader(NOVADNS_HOME))
 	return env.get_template('novadns.template')
 
 def run():
