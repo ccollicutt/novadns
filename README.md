@@ -6,7 +6,7 @@ At any rate, for our application we need the instance hostnames in /etc/hosts wi
 
 ##Usage
 
-Note that his repo is really designed to be packaged, so the packager will likely change the NOVADNS_HOME to where ever it gets installed, eg. /etc/novadns.
+Note that his repo is really designed to be packaged, so the packager will likely change the NOVADNS_HOME to where ever it gets installed, eg. /etc/novadns, and the upstart file will be in /etc/init/novadns.conf.
 
 ```bash
 $ cp nova.conf.example nova.conf
