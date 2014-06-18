@@ -12,7 +12,6 @@ Note that his repo is really designed to be packaged, so the packager will likel
 $ cp nova.conf.example nova.conf
 $ vi nova.conf # enter openstack credentials
 $ sudo start novadns
-$ ps ax  |grep novadns
 $ ps ax  |grep [n]ovadns
  3666 ?        Ss     0:01 /usr/bin/python /home/centos/novadns/novadns.py
  ```
