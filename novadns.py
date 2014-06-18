@@ -7,7 +7,8 @@ import signal
 from novaclient.v1_1 import client
 from jinja2 import Environment, FileSystemLoader
 
-CONFIG_FILE="/home/centos/novadns/novadns.conf"
+CONFIG_FILE = "/home/centos/novadns/novadns.conf"
+OSCOMPUTE_ERROR = 0
 
 class Novadns:
 
@@ -57,15 +58,15 @@ def getTemplate():
 	return env.get_template('novadns.template')
 
 def run():
-
+	global OSCOMPUTE_ERROR
 	novadns = getConfig()
-
-	print "DEBUG: nova wait time is " + str(novadns.wait_time) + " seconds"
 
 	if novadns:
 		nt = getCompute(novadns.user, novadns.password, novadns.tenant, novadns.auth_url)
-
-	OSCOMPUTE_ERROR = 0
+		print "DEBUG: nova wait time is " + str(novadns.wait_time) + " seconds"
+	else:
+		print "ERROR: Novadns object could not be created, exiting..."
+		sys.exit(1)
 
 	while True:
 		# This would be five total for the lifetime of the run though
@@ -79,7 +80,6 @@ def run():
 			print "DEBUG: Writing to /etc/hosts..."
 			with open("/etc/hosts", "wb") as fh:
 				fh.write(output)
-
 		except:
 			print 'ERROR: Getting servers or writing to /etc/hosts failed...'
 			OSCOMPUTE_ERROR = OSCOMPUTE_ERROR + 1
