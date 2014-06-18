@@ -1,0 +1,9 @@
+description "novadns"
+
+start on filesystem or runlevel [2345]
+stop on run level [!2345]
+respawn
+ 
+#exec start-stop-daemon --start --exec /home/centos/novadns/novadns.py \
+#     -- --daemonize --log=/var/log/novadns.log
+exec /home/centos/novadns/novadns.py
