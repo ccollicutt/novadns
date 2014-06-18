@@ -1,0 +1,9 @@
+[default]
+# The time between each nova run to get ips 
+wait_time = 20
+
+[openstack]
+user = some_openstack_user
+tenant = their_tenant
+password = their_password 
+auth_url = https://their-cloud.com:5000/v2.0/
