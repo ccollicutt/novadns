@@ -21,10 +21,7 @@ Create /etc/hosts from openstack
 %prep
 rm -rf ./%{name}
 git clone %{git_repo} %{name}
-#pushd %{name}
-#        # Note the v in front of version
-#        git checkout v%{cybera_version}
-#popd
+# FIXME: Should be checking out a tag here
 
 %build
 
