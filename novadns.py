@@ -7,18 +7,24 @@ import signal
 from novaclient.v1_1 import client
 from jinja2 import Environment, FileSystemLoader
 
-NOVADNS_HOME = "/home/centos/novadns"
+VERSION = 0.2
+NOVADNS_HOME = "/Users/curtis/working/vcl/novadns"
 CONFIG_FILE = NOVADNS_HOME + "/novadns.conf"
 OSCOMPUTE_ERROR = 0
 
+class Server:
+
+	def __init__(self, name, ip):
+		self.name = name
+		self.ip   = ip
 
 class Novadns:
 
 	def __init__(self, user, password, tenant, auth_url, wait_time):
-		self.user = user
-		self.password = password
-		self.tenant = tenant
-		self.auth_url = auth_url
+		self.user      = user
+		self.password  = password
+		self.tenant    = tenant
+		self.auth_url  = auth_url
 		self.wait_time = wait_time
 
 
@@ -71,24 +77,47 @@ def run():
 		sys.exit(1)
 
 	while True:
-		# This would be five total for the lifetime of the run though
+		# FIXME: Ugly
+
 		if OSCOMPUTE_ERROR >= 5:
 			break
-		
+
+		# Get the list of nova servers
+		nova_servers = nt.servers.list()
+
+		all_servers = []
+		for nova_server in nova_servers:
+			ip = None
+			try:
+				# The network, in this example 'cybera' will likely be different in
+				# your openstack environment.
+				ip = nova_server.networks['cybera'][0]
+			except:
+				pass
+
+			# We've actually had times when a server in openstack is active but
+			# has no ip address.
+			if ip and nova_server.status == 'ACTIVE':
+				new_server = Server(nova_server.name, ip)
+				all_servers.append(new_server)
+
+		# Create the template
+		template = getTemplate()
+		output = template.render(servers=all_servers)
+
+		# Write the template to /etc/hosts
+		print "DEBUG: Writing to /etc/hosts..."
 		try:
-			servers = nt.servers.list()
-			template = getTemplate()
-			output = template.render(servers=servers)
-			print "DEBUG: Writing to /etc/hosts..."
 			with open("/etc/hosts", "wb") as fh:
 				fh.write(output)
 		except:
-			print 'ERROR: Getting servers or writing to /etc/hosts failed...'
+			print 'ERROR: Writing to /etc/hosts failed...'
 			OSCOMPUTE_ERROR = OSCOMPUTE_ERROR + 1
 
+		# Sleep for a weak daemon, why upstart is not that bad :)
 		time.sleep(novadns.wait_time)
 
-	
+
 	# Too many errors
 	print "ERROR: Maximum errors reached, exiting..."
 	sys.exit(0)

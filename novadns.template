@@ -1,6 +1,5 @@
 # WARNING: This is written by the novadns script -- curtis
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-{% for server in servers %} {% if server.status == "ACTIVE" %}
-{{ server.networks['cybera'][0] }}     {{ server.name }} {% endif %} {% endfor %}
-
+{% for server in servers %}
+{{ server.ip }}     {{ server.name }} {% endfor %}
