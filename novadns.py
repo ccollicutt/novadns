@@ -8,7 +8,7 @@ from novaclient.v1_1 import client
 from jinja2 import Environment, FileSystemLoader
 
 VERSION = 0.2
-NOVADNS_HOME = "/Users/curtis/working/vcl/novadns"
+NOVADNS_HOME = "/etc/novadns"
 CONFIG_FILE = NOVADNS_HOME + "/novadns.conf"
 OSCOMPUTE_ERROR = 0
 
