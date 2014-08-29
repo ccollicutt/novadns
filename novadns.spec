@@ -1,10 +1,7 @@
-#
-# Example spec file for cdplayer app...
-#
 Summary: novadns
 Name: novadns
 Version: 0.2.1
-Release: 1 
+Release: 1
 License: GPL
 Group: Applications/System
 #Source: https://github.com/curtisgithub/novadns
@@ -19,7 +16,7 @@ Requires: python-jinja2
 Requires: python-novaclient
 
 %description
-Create /etc/hosts from openstack 
+Create /etc/hosts from openstack
 
 %prep
 rm -rf ./%{name}
